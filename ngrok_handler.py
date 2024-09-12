@@ -22,7 +22,8 @@ class NGROK:
         self.headers = {
             "Authorization": f"Bearer {self.key_reader}",
             "Ngrok-Version": "2",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "True"
         }
         self.cred_url = CREDURL
         self.data = {
