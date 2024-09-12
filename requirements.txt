@@ -1,0 +1,7 @@
+requests
+fastapi
+uvicorn
+eventlet
+python-socketio
+simple-websocket
+Jinja2
