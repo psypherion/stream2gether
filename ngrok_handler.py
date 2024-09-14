@@ -4,8 +4,7 @@ import os
 import requests
 import subprocess
 import time
-from typing import AnyStr, Any
-from typing import List
+from typing import AnyStr, Any, List
 
 load_dotenv()
 
