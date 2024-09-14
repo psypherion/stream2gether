@@ -101,7 +101,7 @@ class NGROK:
     def save_ngrok_urls(self, urls: List) -> None:
         if self.url_file_path not in os.listdir():
             os.makedirs(self.url_file_path)
-        with open("urls.txt", "w") as f:
+        with open(f"{self.url_file_path}/urls.txt", "w") as f:
             for url  in urls:
                 f.write(
                     f"{url}\n"
