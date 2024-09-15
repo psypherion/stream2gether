@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stream2Gether</title>
+    <link rel="icon" href="{{ url_for('static', path='logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', path='room.css') }}">
+</head>
+<body>
+    <div class="twoPart">
+        <div class="leftPart">
+            <div class="movie-name">
+                <h1>{{ movie_name }}</h1>
+            </div>
+            <div class="video-container">
+                <video controls>
+                    <source src="{{ video_url }}" type="video/mp4">
+                    Browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="rightPart">
+            <div class="glass-container">
+                <div class="chatHead">
+                    <h1>Ongoing Chat</h1>
+                    <p>Joined Users :
+                        {% for user_name in user_names %}
+                            {{ user_name }}
+                            {% if not loop.last %}
+                                |
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    <hr>
+                    <div id="chat"></div>
+                </div>
+                <div class="container">
+                    <form id="message-form" class="message-form">
+                        <input id="message-input" placeholder="Message..." type="text" />
+                        <button id="send-button" class="stylish-button" type="button">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', path='chat.js') }}"></script>
+</body>
+</html>

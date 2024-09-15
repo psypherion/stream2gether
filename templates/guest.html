@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join a Room</title>
+        <link rel="icon" href="{{ url_for('static', path='logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', path='join.css') }}">    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #333, #555);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"] {
+            border: none;
+            outline: none;
+            height: 34px;
+            border-radius: 22px;
+            padding: 0 18px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input[type="submit"] {
+            background-color: #555;
+            border: none;
+            border-radius: 22px;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #777;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            input[type="text"], input[type="submit"] {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Join a Room</h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Enter Your name..." required />
+            <input type="text" name="room_key" placeholder="Enter Room Key" required>
+            <input type="submit" value="Join Room">
+        </form>
+    </div>
+</body>
+</html>

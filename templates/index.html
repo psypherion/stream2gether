@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <link rel="icon" href="{{ url_for('static', path='logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    <div class="top">
+        <nav style="font-family: Hack, monospace, Bangla493, sans-serif;">
+            <div class="logo">
+                <img src="https://www.freepnglogos.com/uploads/parrot/pirate-ship-image-download-clip-art-clip-33.png" alt="" width="130"/>
+            </div>
+            <ul class="menuItems">
+                <li><a href="#account" data-item="Account">Account</a></li>
+                <li><a href="#projects" data-item="Projects">Projects</a></li>
+                <li><a href="#contact" data-item="Contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="glass-flex">
+            <h1>Stream2Gether</h1>
+            <a href="{{ url_for('host') }}">Host a Room</a>
+            <a href="{{ url_for('guest') }}">Join as Guest</a>
+        </div>
+    </div>
+</body>
+</html>
