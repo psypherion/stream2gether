@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Upload</title>
+    <link rel="icon" href="{{ url_for('static', path='logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', path='join.css') }}">
+    <script>
+        function triggerFileUpload() {
+            document.getElementById('file-upload').click();
+        }
+
+        function handleFileSelect(event) {
+            const input = event.target;
+            const file = input.files[0];
+            const goingToWatchInput = document.getElementById('going-to-watch');
+
+            if (file) {
+                goingToWatchInput.value = file.name;
+            } else {
+                goingToWatchInput.value = '';
+            }
+        }
+
+        function submitForm() {
+            const nameInput = document.getElementById('name-input').value;
+            fetch('/set_name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: nameInput })
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-flex">
+            <h1>Room</h1>
+            <form method="post" enctype="multipart/form-data" onsubmit="submitForm()">
+                <div class="name">
+                    <input id="name-input" name="name" type="text" placeholder="Enter Your name..." />
+                    <br>
+                    <input id="going-to-watch" name="going_to_watch" type="text" placeholder="Going to watch..." />
+                    <br><br>
+                </div>
+                <div class="choose-file">
+                    <div class="drop-container" onclick="triggerFileUpload()">
+                        <br>
+                        <span class="drop-title">Drop files here or click to upload</span>
+                        <br>
+                        <input id="file-upload" type="file" name="file" onchange="handleFileSelect(event)" />
+                        <br>
+                    </div>
+                    <br><br>
+                    <input id="upload-button" type="submit" value="Create Room and Upload Video" />
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

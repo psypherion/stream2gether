@@ -1,0 +1,263 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #cfcfcf, #3e3e3f);
+    font-family: Arial, sans-serif;
+}
+
+.twoPart {
+    display: flex;
+    width: 900%;
+    justify-content: space-between;
+    gap: 100px; /* Add space between the two parts */
+}
+
+.leftPart, .rightPart {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Center content within each part */
+    align-items: center; /* Center content within each part */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.leftPart {
+    display: flex;
+    justify-content: space-between;
+    align-items: right;
+    flex-direction: column;
+    /* padding-right: 20px; */
+}
+
+.rightPart{
+    display: flex;
+    justify-content: right;
+    align-items: right;
+}
+
+.movie-name{
+    padding-top: 40px;
+}
+.video-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px; /* Rounded edges */
+    padding-top: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 100%; /* Make it responsive */
+    max-width: 1000px; /* Set a maximum width */
+    height: auto; /* Let height adjust automatically */
+    aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px; /* Rounded edges for video */
+    object-fit: cover; /* Ensure the video scales properly */
+}
+.video-call{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.videoBox {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ddd;
+    position: relative;
+}
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.glass-container {
+    background: rgba(26, 24, 24, 0.048);
+    border-radius: 30px; /* Increased for more rounded edges */
+    padding: 20px;
+    width: 100%; /* Make it responsive */
+    max-width: 350px; /* Set a maximum width */
+    height: 80vh; /* Adjust for a responsive height */
+    text-align: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure space is distributed between chat and form */
+}
+
+h1 {
+    margin: 0 0 10px;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    margin: 20px 0;
+}
+
+#chat {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px; /* Reduce margin to make more room for the form */
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.message-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: bottom;
+    padding: 10px;
+    border-top: 1px solid #ddd; /* Add a border on top to separate from messages */
+    background: transparent; /* Remove extra box appearance */
+}
+
+.message-form input[type="text"] {
+    border: none;
+    outline: none;
+    height: 34px;
+    border-radius: 22px;
+    flex-grow: 1;
+    padding: 0 18px;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin-right: 10px;
+    background-color: #333;
+    color: #fff;
+}
+
+.message-form input[type="button"] {
+    background: linear-gradient(135deg, #a1b2c3, #6a7f9c);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    height: 34px;
+    cursor: pointer;
+    padding: 0 18px;
+    margin-left: 10px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.message-form input[type="button"]:hover {
+    background: linear-gradient(135deg, #6a7f9c, #a1b2c3);
+}
+
+
+.stylish-button {
+    background: linear-gradient(135deg, #a1b2c3, #6a7f9c);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    height: 34px;
+    cursor: pointer;
+    padding: 0 18px;
+    margin-left: 10px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.stylish-button:hover {
+    background: linear-gradient(135deg, #8da0bb, #7f858a);
+}
+
+#messages {
+    max-height: 300px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-top: 10px; /* Add some space from the <hr> */
+}
+
+#messages div {
+    padding: 5px;
+    border-bottom: 1px solid #ddd; /* Add a subtle border between messages */
+    color: #fff; /* Ensure text color contrasts with the background */
+}
+
+.container{
+    margin-top: auto;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .twoPart {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .leftPart, .rightPart {
+        padding: 0;
+        justify-content: center; /* Center content on smaller screens */
+    }
+
+    .rightPart {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .glass-container {
+        width: 100%;
+        max-width: none; /* Remove the max-width */
+        height: 60vh; /* Adjust height for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-container {
+        height: 50vh; /* Adjust height for very small screens */
+    }
+
+    .message-form input[type="text"] {
+        font-size: 12px;
+    }
+
+    .message-form input[type="button"] {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .twoPart {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .twoPart {
+        flex-direction: column;
+    }
+
+    .leftPart, .rightPart {
+        padding: 10px;
+    }
+
+    .glass-container {
+        height: 60vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-container {
+        height: 50vh;
+    }
+
+    .message-form input[type="text"],
+    .message-form input[type="button"] {
+        font-size: 12px;
+    }
+}

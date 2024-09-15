@@ -1,0 +1,182 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ecebf1ea;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    color: #333;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container a {
+    margin-top: 20px;
+}
+
+.glass-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    background: linear-gradient(135deg, #f7f5f5, #8b8b8d52);
+}
+
+.glass-flex h1 {
+    margin-bottom: 20px;
+}
+
+.glass-flex a {
+    display: block;
+    margin: 10px 0;
+    padding: 15px 90px;
+    color: #9642c7;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.glass-flex a:hover {
+    background: rgba(197, 192, 192, 0.3);
+}
+
+/* Style for the entire form containing name inputs */
+.name form {
+    margin-bottom: 20px;
+}
+
+/* Style for input fields within the 'name' class */
+.name input[type="text"] {
+    border: 2px solid #ddd; /* Light border to make the input stand out */
+    outline: none;
+    height: 34px;
+    border-radius: 22px; /* Rounded corners */
+    padding: 0 18px; /* Space inside the input */
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #333; /* Dark background for the input */
+    color: #fff; /* White text */
+    width: 100%; /* Full width of the parent container */
+    max-width: 300px; /* Max width to prevent stretching */
+    transition: border-color 0.3s, background-color 0.3s; /* Smooth transition for focus effects */
+}
+
+/* Style when the input is focused */
+.name input[type="text"]:focus {
+    border-color: #6a7f9c; /* Change border color on focus */
+    background-color: #444; /* Slightly lighter background */
+}
+
+/* Optional: Style for placeholder text */
+.name input[type="text"]::placeholder {
+    color: #bbb; /* Lighter color for placeholder text */
+}
+
+
+.choose-file form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#file-upload {
+    display: none;
+}
+
+#upload-button, #create-room-button {
+    background: linear-gradient(135deg, #a1b2c3, #6a7f9c);
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    height: 34px;
+    cursor: pointer;
+    padding: 0 18px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+#upload-button:hover, #create-room-button:hover {
+    background: linear-gradient(135deg, #6a7f9c, #a1b2c3);
+}
+
+.drop-container {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px dashed #555;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+.drop-container:hover {
+    background: #eee;
+    border-color: #111;
+}
+
+.drop-container:hover .drop-title {
+    color: #222;
+}
+
+.drop-title {
+    color: #444;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    transition: color .2s ease-in-out;
+}
+
+
+#file-upload {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .glass-flex {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .glass-flex a {
+        padding: 10px 20px;
+    }
+
+    .name input[type="text"] {
+        font-size: 12px;
+        padding: 0 12px;
+    }
+
+    #upload-button, #create-room-button {
+        font-size: 12px;
+        padding: 0 12px;
+    }
+}
