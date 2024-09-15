@@ -57,6 +57,10 @@ async def host(request: Request) -> Any:
         if user_name not in rooms[room_key]["user_names"]:
             rooms[room_key]["user_names"].append(user_name)
 
+        # Store username in session
+        request.session['username'] = user_name
+        request.session['room_key'] = room_key
+
         media = form.get("file")
         if media:
             file_path = os.path.join(UPLOAD_DIR, media.filename)
@@ -64,7 +68,6 @@ async def host(request: Request) -> Any:
                 await f.write(await media.read())
 
             request.session["media_path"] = media.filename
-            request.session["room_key"] = room_key
 
         return RedirectResponse(url=f"/room/{room_key}", status_code=303)
 
@@ -85,7 +88,6 @@ async def stream_video(request: Request) -> Response:
     except Exception as e:
         return Response(f"Internal Server Error: {str(e)}", status_code=500)
 
-
 async def guest(request: Request) -> Any:
     if request.method == "POST":
         form = await request.form()
@@ -96,6 +98,10 @@ async def guest(request: Request) -> Any:
             # Add the user to the room if it exists
             if user_name not in rooms[room_key]["user_names"]:
                 rooms[room_key]["user_names"].append(user_name)
+
+            # Store username in session
+            request.session['username'] = user_name
+            request.session['room_key'] = room_key
 
             # Redirect to the room page
             return RedirectResponse(url=f"/room/{room_key}", status_code=303)
@@ -136,7 +142,7 @@ app = Starlette(
         Route("/room/{key}", room, name="room"),
         Route("/stream/{room_key}", stream_video, name="stream_video"),
         Route("/guest", guest, name="guest", methods=["GET", "POST"]),
-        WebSocketRoute("/ws/{room_key}", handle_connection),
+        WebSocketRoute("/ws/{room_key}", handle_connection),  # WebSocket route for chat
         Mount("/static", StaticFiles(directory="static"), name="static")
     ]
 )
