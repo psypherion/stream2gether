@@ -12,7 +12,9 @@ import os
 from typing import Dict, List, Any
 import aiofiles
 from socketHandler import handle_connection
+import logging
 
+logger = logging.getLogger(__name__)
 UPLOAD_DIR = "uploads"
 
 templates = Jinja2Templates(directory="templates")
@@ -52,12 +54,13 @@ async def host(request: Request) -> Any:
         else:
             if "media_name" not in rooms[room_key]:
                 rooms[room_key]["media_name"] = form.get("going_to_watch", "Untitled")
+            else:
+                rooms[room_key]["media_name"] = form.get("going_to_watch", rooms[room_key]["media_name"])
 
         user_name: str = form.get("name", "anon")
         if user_name not in rooms[room_key]["user_names"]:
             rooms[room_key]["user_names"].append(user_name)
 
-        # Store username in session
         request.session['username'] = user_name
         request.session['room_key'] = room_key
 
@@ -72,6 +75,7 @@ async def host(request: Request) -> Any:
         return RedirectResponse(url=f"/room/{room_key}", status_code=303)
 
     return templates.TemplateResponse("host.html", {"request": request})
+
 
 async def stream_video(request: Request) -> Response:
     media_path = request.session.get("media_path")
@@ -114,6 +118,9 @@ async def guest(request: Request) -> Any:
 
     return templates.TemplateResponse("guest.html", {"request": request})
 
+
+
+
 async def room(request: Request) -> _TemplateResponse:
     room_key: str = request.path_params['key']
     if room_key in rooms:
@@ -124,6 +131,10 @@ async def room(request: Request) -> _TemplateResponse:
 
         video_url: str = f"/stream/{room_key}"
 
+        logger.debug(f"Room key: {room_key}")
+        logger.debug(f"Media name: {media_name}")
+        logger.debug(f"User names: {user_names}")
+
         return templates.TemplateResponse("room.html", {
             "request": request,
             "movie_name": media_name,
@@ -133,6 +144,8 @@ async def room(request: Request) -> _TemplateResponse:
         })
     else:
         return templates.TemplateResponse("error.html", {"request": request, "message": "Room not found"})
+
+
 
 app = Starlette(
     debug=True,

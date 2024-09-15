@@ -21,26 +21,17 @@
                 goingToWatchInput.value = '';
             }
         }
-
-        function submitForm() {
-            const nameInput = document.getElementById('name-input').value;
-            fetch('/set_name', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: nameInput })
-            });
-        }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="glass-flex">
-            <h1>Room</h1>
-            <form method="post" enctype="multipart/form-data" onsubmit="submitForm()">
+            <h1>Host Room</h1>
+            <form method="post" enctype="multipart/form-data">
                 <div class="name">
-                    <input id="name-input" name="name" type="text" placeholder="Enter Your name..." />
+                    <input id="name-input" name="name" type="text" placeholder="Enter Your Name" />
                     <br>
-                    <input id="going-to-watch" name="going_to_watch" type="text" placeholder="Going to watch..." />
+                    <input type="text" name="going_to_watch" id="going-to-watch" placeholder="Movie Name" required>
                     <br><br>
                 </div>
                 <div class="choose-file">
