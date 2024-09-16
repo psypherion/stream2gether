@@ -1,7 +1,9 @@
+# app.py
+
 from chunkizer import VideoStreamer
 from idGen import RoomKeyGenerator
 from starlette.applications import Starlette
-from starlette.responses import RedirectResponse, Response
+from starlette.responses import RedirectResponse
 from starlette.routing import Route, Mount, WebSocketRoute
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates, _TemplateResponse
@@ -13,6 +15,8 @@ from typing import Dict, List, Any
 import aiofiles
 from socketHandler import handle_connection
 import logging
+from tunnels import Cloudflare
+import subprocess
 
 logger = logging.getLogger(__name__)
 UPLOAD_DIR = "uploads"
@@ -23,10 +27,15 @@ SECRET_KEY = os.environ.get("SESSION_SECRET_KEY", "your-default-secret-key")
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-# Define the type for the rooms dictionary
 RoomData = Dict[str, Any]
-
 rooms: Dict[str, RoomData] = {}
+
+# Extract the first tunnel URL and use it for streaming
+cloudflare = Cloudflare()
+cloudflare.path_checker()  # Ensure the log directory exists
+log_files = cloudflare.log_list
+urls = cloudflare.extract_tunnels_recursively(log_files)
+streaming_base_url = urls[0] if urls else "http://localhost:8000"  # Fallback URL if no tunnel is found
 
 async def index(request: Request) -> _TemplateResponse:
     room_key: str = RoomKeyGenerator(seed=123).generate_key(length=6)
@@ -72,25 +81,12 @@ async def host(request: Request) -> Any:
 
             request.session["media_path"] = media.filename
 
+            # Update videoHost.py with the new video path
+            subprocess.run(["curl", "-X", "POST", "-d", f"video_path={file_path}", "http://localhost:8000/update_video"])
+
         return RedirectResponse(url=f"/room/{room_key}", status_code=303)
 
     return templates.TemplateResponse("host.html", {"request": request})
-
-
-async def stream_video(request: Request) -> Response:
-    media_path = request.session.get("media_path")
-    if not media_path:
-        return Response("Video not found", status_code=404)
-
-    video_path = os.path.join(UPLOAD_DIR, media_path)
-
-    try:
-        video_streamer = VideoStreamer(video_path)
-        return await video_streamer.stream_video(request)
-    except ValueError as e:
-        return Response(f"Error: {str(e)}", status_code=400)
-    except Exception as e:
-        return Response(f"Internal Server Error: {str(e)}", status_code=500)
 
 async def guest(request: Request) -> Any:
     if request.method == "POST":
@@ -99,27 +95,20 @@ async def guest(request: Request) -> Any:
         user_name: str = form.get("name", "anon")
 
         if room_key in rooms:
-            # Add the user to the room if it exists
             if user_name not in rooms[room_key]["user_names"]:
                 rooms[room_key]["user_names"].append(user_name)
 
-            # Store username in session
             request.session['username'] = user_name
             request.session['room_key'] = room_key
 
-            # Redirect to the room page
             return RedirectResponse(url=f"/room/{room_key}", status_code=303)
         else:
-            # Handle the case where the room key is invalid
             return templates.TemplateResponse("error.html", {
                 "request": request,
                 "message": "Room not found"
             })
 
     return templates.TemplateResponse("guest.html", {"request": request})
-
-
-
 
 async def room(request: Request) -> _TemplateResponse:
     room_key: str = request.path_params['key']
@@ -129,7 +118,7 @@ async def room(request: Request) -> _TemplateResponse:
         media_name: str = room_data.get("media_name", "Untitled")
         user_names: List[str] = room_data.get("user_names", [])
 
-        video_url: str = f"/stream/{room_key}"
+        video_url: str = f"{streaming_base_url}/stream/"
 
         logger.debug(f"Room key: {room_key}")
         logger.debug(f"Media name: {media_name}")
@@ -145,21 +134,27 @@ async def room(request: Request) -> _TemplateResponse:
     else:
         return templates.TemplateResponse("error.html", {"request": request, "message": "Room not found"})
 
-
-
 app = Starlette(
     debug=True,
     routes=[
         Route("/", index),
         Route("/host", host, name="host", methods=["GET", "POST"]),
         Route("/room/{key}", room, name="room"),
-        Route("/stream/{room_key}", stream_video, name="stream_video"),
         Route("/guest", guest, name="guest", methods=["GET", "POST"]),
         WebSocketRoute("/ws/{room_key}", handle_connection),  # WebSocket route for chat
         Mount("/static", StaticFiles(directory="static"), name="static")
     ]
 )
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+from starlette.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Update with specific origins if needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=3000)
+    uvicorn.run(app, host="127.0.0.1", port=5000)

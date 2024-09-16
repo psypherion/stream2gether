@@ -4,9 +4,9 @@ import aiofiles
 from starlette.requests import Request
 from starlette.responses import StreamingResponse
 
-
 class VideoStreamer:
     ALLOWED_EXTENSIONS: set[str] = {'mp4', 'mkv', 'webm', 'avi', 'mov', 'vid'}
+    CHUNK_SIZE: int = 512 * 1024  # 512 KB chunk size
 
     def __init__(self, video_path: str):
         self.video_path = video_path
@@ -31,7 +31,7 @@ class VideoStreamer:
                 async with aiofiles.open(self.video_path, 'rb') as f:
                     await f.seek(start)
                     while start <= end:
-                        chunk = await f.read(1024 * 1024)  # Read in 1 MB chunks
+                        chunk = await f.read(self.CHUNK_SIZE)
                         if not chunk:
                             break
                         start += len(chunk)
@@ -48,7 +48,7 @@ class VideoStreamer:
         else:
             async def file_generator() -> AsyncIterable[bytes]:
                 async with aiofiles.open(self.video_path, 'rb') as f:
-                    while chunk := await f.read(1024 * 1024):  # Read in 1 MB chunks
+                    while chunk := await f.read(self.CHUNK_SIZE):
                         yield chunk
 
             headers = {
